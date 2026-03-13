@@ -1,0 +1,8 @@
+tests/
+docs/
+examples/
+.github/
+coverage/
+src/
+*.log
+.env
