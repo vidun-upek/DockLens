@@ -18,8 +18,8 @@ if (recursive) results.push(...walkForDockerfiles(fullPath, true));
 continue;
 }
 if (entry.name === 'Dockerfile' ||
-entry.name.toLowerCase().startsWith('dockerfile')) {
-results.push(fullPath);
+    entry.name.toLowerCase().startsWith('dockerfile')) {
+    results.push(fullPath);
 }
 }
 return results;
