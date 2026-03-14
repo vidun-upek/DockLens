@@ -428,4 +428,4 @@ For issues, feature requests, or contributions, please visit the DockerLens repo
 
 ---
 
-*DockerLens — Made with ❤️ for better Docker practices*
+*DockerLens — Made By Vidun Shanuka _ CS GRAD IN SRI LANKA*
