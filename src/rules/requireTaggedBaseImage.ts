@@ -15,9 +15,10 @@ const rule: Rule = {
 		getInstructionsBy(context, 'FROM')
 			.filter((instruction) => {
 				const image = instruction.argument.split(/\s+AS\s+/i)[0].trim();
-				if (image === 'scratch' || image.includes('@sha256:')) return false;
-				const lastSegment = image.split('/').pop() ?? image;
-				return !lastSegment.includes(':');
+				if (image === 'scratch' || image.includes('@sha256:') || /@[a-z0-9]+:/i.test(image)) return false;
+				// Check if there's a tag (colon not used for registry port)
+				const hasTag = /:[^/:]+$/.test(image);
+				return !hasTag;
 			})
 			.map((instruction) =>
 				createFinding(
