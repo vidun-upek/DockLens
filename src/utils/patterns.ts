@@ -1,5 +1,6 @@
 export const SECRET_FILE_PATTERNS = [
-/\.env(\.|$)/i,
+/^\.env$/i,          // Exact .env file only
+/\.env\/|\/.env$/i,  // .env file in paths or as final segment
 /id_rsa/i,
 /id_dsa/i,
 /\.pem$/i,
