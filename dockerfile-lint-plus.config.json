@@ -1,0 +1,26 @@
+{
+"failOn": ["error"],
+"format": "stylish",
+"rules": {
+"no-latest-tag": "error",
+"require-tagged-base-image": "error",
+"prefer-small-base-image": "info",
+"pin-major-minor-version": "warning",
+"copy-deps-before-source": "warning",
+"prefer-lockfile-install": "warning",
+"use-npm-ci-in-ci-images": "warning",
+"combine-package-manager-cleanup": "warning",
+"avoid-redundant-run-layers": "info",
+"warn-copy-dot-early": "warning",
+"require-dockerignore-hint": "warning",
+"prefer-copy-over-add": "warning",
+"avoid-copying-secrets": "error",
+"require-non-root-user": "warning",
+"no-sudo-in-container": "error",
+"no-curl-bash": "error",
+"limit-installed-packages": "info",
+"suggest-multi-stage-build": "warning",
+"no-dev-dependencies-in-runtime": "warning",
+"require-explicit-cmd-or-entrypoint": "warning"
+}
+}
