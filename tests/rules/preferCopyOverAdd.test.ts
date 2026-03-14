@@ -3,40 +3,50 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parseDockerfile } from '../../src/analyzer/parseDockerfile.js';
-import rule from '../../src/rules/noLatestTag.js';
-describe('noLatestTag rule', () => {
-	it('flags latest tag usage', () => {
+import rule from '../../src/rules/preferCopyOverAdd.js';
+
+describe('preferCopyOverAdd rule', () => {
+	it('flags ADD for local files', () => {
 		const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dflp-'));
 		const filePath = path.join(dir, 'Dockerfile');
-		fs.writeFileSync(filePath, 'FROM node:latest\n');
+		fs.writeFileSync(filePath, 'FROM node:20\nADD local-file.txt /app/\n');
 		const context = parseDockerfile(filePath);
 		const findings = rule.check(context);
 		expect(findings).toHaveLength(1);
-		expect(findings[0].ruleId).toBe('no-latest-tag');
+		expect(findings[0].ruleId).toBe('prefer-copy-over-add');
 	});
 
-	it('does not flag specific version tags', () => {
+	it('does not flag ADD for tar.gz archives', () => {
 		const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dflp-'));
 		const filePath = path.join(dir, 'Dockerfile');
-		fs.writeFileSync(filePath, 'FROM node:20.11.0\n');
+		fs.writeFileSync(filePath, 'FROM node:20\nADD app.tar.gz /app/\n');
 		const context = parseDockerfile(filePath);
 		const findings = rule.check(context);
 		expect(findings).toHaveLength(0);
 	});
 
-	it('flags latest without tag specification', () => {
+	it('does not flag COPY', () => {
 		const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dflp-'));
 		const filePath = path.join(dir, 'Dockerfile');
-		fs.writeFileSync(filePath, 'FROM ubuntu\n');
+		fs.writeFileSync(filePath, 'FROM node:20\nCOPY local-file.txt /app/\n');
 		const context = parseDockerfile(filePath);
 		const findings = rule.check(context);
-		expect(findings.length).toBeGreaterThanOrEqual(0); // May flag or warn about no tag
+		expect(findings).toHaveLength(0);
 	});
 
-	it('does not flag tagged alpine images', () => {
+	it('flags ADD with txt extension', () => {
 		const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dflp-'));
 		const filePath = path.join(dir, 'Dockerfile');
-		fs.writeFileSync(filePath, 'FROM alpine:3.19\n');
+		fs.writeFileSync(filePath, 'FROM node:20\nADD README.txt /app/\n');
+		const context = parseDockerfile(filePath);
+		const findings = rule.check(context);
+		expect(findings).toHaveLength(1);
+	});
+
+	it('does not flag ADD with tar extension', () => {
+		const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dflp-'));
+		const filePath = path.join(dir, 'Dockerfile');
+		fs.writeFileSync(filePath, 'FROM node:20\nADD archive.tar /app/\n');
 		const context = parseDockerfile(filePath);
 		const findings = rule.check(context);
 		expect(findings).toHaveLength(0);
