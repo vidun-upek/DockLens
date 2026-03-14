@@ -428,4 +428,4 @@ For issues, feature requests, or contributions, please visit the DockerLens repo
 
 ---
 
-*DockerLens — Made By Vidun Shanuka _ CS GRAD IN SRI LANKA*
+*DockerLens — Made By Vidun Shanuka _ Full Stack / ML Developer IN SRI LANKA*
